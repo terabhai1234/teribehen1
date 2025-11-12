@@ -1,3 +1,63 @@
+#include <iostream>
+#define MAX 5
+using namespace std;
+
+class Queue {
+    int a[MAX];
+    int front, rear;
+public:
+    Queue() {
+        front = -1;
+        rear = -1;
+    }
+
+    bool isempty() {
+        return (front == -1 && rear == -1);
+    }
+
+    bool isfull() {
+        return ((rear + 1) % MAX == front);
+    }
+
+    void enqueue(int value);
+    void dequeue();
+    void display();
+};
+
+void Queue::enqueue(int value) {
+    if (isfull()) {
+        cout << "Queue is full. Cannot insert more elements.\n";
+        return;
+    }
+    if (isempty()) {
+        front = 0;
+        rear = 0;
+    } else {
+        rear = (rear + 1) % MAX;
+    }
+    a[rear] = value;
+    cout << "Inserted element is: " << value << "\n";
+}
+
+void Queue::dequeue() {
+    if (isempty()) {
+        cout << "Queue is empty. Cannot delete element.\n";
+        return;
+    }
+    cout << "Deleted element is = " << a[front] << "\n";
+    if (front == rear) {
+        front = -1;
+        rear = -1;
+    } else {
+        front = (front + 1) % MAX;
+    }
+}
+
+void Queue::display() {
+    if (isempty()) {
+        cout << "Queue is empty.\n";
+        return;
+    }
     cout << "Queue elements are: ";
     int i = front;
     while (true) {
@@ -35,3 +95,4 @@ int main() {
     } while (choice != 4);
     return 0;
 }
+
