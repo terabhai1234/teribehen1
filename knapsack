@@ -1,0 +1,29 @@
+class Parcel:
+    def __init__(self, weight, profit):
+        self.weight = weight
+        self.profit = profit
+        self.profit_per_weight = profit / weight
+
+def fractional_knapsack(parcels, capacity):
+    parcels.sort(key=lambda x: x.profit_per_weight, reverse=True)
+    total_profit = 0.0
+    for parcel in parcels:
+        if capacity == 0:
+            break
+        if parcel.weight <= capacity:
+            total_profit += parcel.profit
+            capacity -= parcel.weight
+        else:
+            total_profit += parcel.profit_per_weight * capacity
+            capacity = 0
+    return total_profit
+
+if __name__ == "__main__":
+    parcels = [
+        Parcel(10, 60),
+        Parcel(20, 100),
+        Parcel(30, 120)
+    ]
+    truck_capacity = 50
+    max_profit = fractional_knapsack(parcels, truck_capacity)
+    print(f"Maximum profit that can be achieved: {max_profit:.2f}")
