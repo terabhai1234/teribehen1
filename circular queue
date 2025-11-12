@@ -1,0 +1,37 @@
+    cout << "Queue elements are: ";
+    int i = front;
+    while (true) {
+        cout << a[i] << "\t";
+        if (i == rear) break;
+        i = (i + 1) % MAX;
+    }
+    cout << "\n";
+}
+
+int main() {
+    Queue q;
+    int value, choice;
+    do {
+        cout << "\n1. Enqueue\n2. Dequeue\n3. Display\n4. Exit\nEnter choice: ";
+        cin >> choice;
+        switch (choice) {
+            case 1:
+                cout << "Enter value: ";
+                cin >> value;
+                q.enqueue(value);
+                break;
+            case 2:
+                q.dequeue();
+                break;
+            case 3:
+                q.display();
+                break;
+            case 4:
+                cout << "Exiting...\n";
+                break;
+            default:
+                cout << "Wrong choice.\n";
+        }
+    } while (choice != 4);
+    return 0;
+}
