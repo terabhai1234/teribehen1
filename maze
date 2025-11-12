@@ -4,6 +4,7 @@ import numpy as np
 
 DIRECTIONS = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 
+
 class Node:
     def __init__(self, position, parent=None):
         self.position = position
@@ -15,65 +16,79 @@ class Node:
     def __lt__(self, other):
         return self.f < other.f
 
+
 def heuristic(a, b):
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
+
 def a_star(maze, start, end):
     open_list = []
-    g_score = {start: 0}
+    closed_set = set()
+
     start_node = Node(start)
+    end_node = Node(end)
+
     heapq.heappush(open_list, start_node)
 
     while open_list:
-        current = heapq.heappop(open_list)
+        current_node = heapq.heappop(open_list)
+        closed_set.add(current_node.position)
 
-        if current.position == end:
+        if current_node.position == end_node.position:
             path = []
-            while current:
-                path.append(current.position)
-                current = current.parent
+            while current_node:
+                path.append(current_node.position)
+                current_node = current_node.parent
             return path[::-1]
 
-        for d in DIRECTIONS:
-            neighbor = (current.position[0] + d[0], current.position[1] + d[1])
+        for direction in DIRECTIONS:
+            neighbor_pos = (current_node.position[0] + direction[0],
+                            current_node.position[1] + direction[1])
 
-            if (0 <= neighbor[0] < maze.shape[0] and
-                0 <= neighbor[1] < maze.shape[1] and
-                maze[neighbor] == 0):
+            if (0 <= neighbor_pos[0] < maze.shape[0] and
+                0 <= neighbor_pos[1] < maze.shape[1] and
+                maze[neighbor_pos] == 0 and
+                    neighbor_pos not in closed_set):
 
-                tentative_g = g_score[current.position] + 1
+                neighbor_node = Node(neighbor_pos, current_node)
+                neighbor_node.g = current_node.g + 1
+                neighbor_node.h = heuristic(neighbor_pos, end_node.position)
+                neighbor_node.f = neighbor_node.g + neighbor_node.h
 
-                if neighbor not in g_score or tentative_g < g_score[neighbor]:
-                    g_score[neighbor] = tentative_g
-                    neighbor_node = Node(neighbor, current)
-                    neighbor_node.g = tentative_g
-                    neighbor_node.h = heuristic(neighbor, end)
-                    neighbor_node.f = neighbor_node.g + neighbor_node.h
+                if not any(open_node.position == neighbor_pos and open_node.f <= neighbor_node.f for open_node in open_list):
                     heapq.heappush(open_list, neighbor_node)
 
     return None
 
+
 def plot_maze(maze, path=None):
+    plt.figure(figsize=(8, 8))
     plt.imshow(maze, cmap="binary")
     if path:
-        x, y = zip(*path)
-        plt.plot(y, x, color="red", linewidth=2)
-    plt.gca().invert_yaxis()
+        path_x, path_y = zip(*path)
+        plt.plot(path_y, path_x, color="red", linewidth=2)
+    plt.title("Maze Navigation")
     plt.show()
 
-maze = np.array([
-    [0, 1, 0, 0, 0],
-    [0, 1, 0, 1, 0],
-    [0, 0, 0, 1, 0],
-    [0, 1, 1, 1, 0],
-    [0, 0, 0, 0, 0]
-])
 
-path = a_star(maze, (0, 0), (4, 4))
+if __name__ == "__main__":
+    maze = np.array([
+        [0, 1, 0, 0, 0],
+        [0, 1, 0, 1, 0],
+        [0, 0, 0, 1, 0],
+        [0, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0]
+    ])
 
-if path:
-    print("Path found:", path)
-    plot_maze(maze, path)
-else:
-    print("No path found!")
-    plot_maze(maze)
+    start = (0, 0)
+    end = (4, 4)
+
+    path = a_star(maze, start, end)
+
+    if path:
+        print("Path found:", path)
+        plot_maze(maze, path)
+    else:
+        print("No path found!")
+        plot_maze(maze)
+
