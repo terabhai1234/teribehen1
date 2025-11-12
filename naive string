@@ -1,0 +1,19 @@
+def naive_string_matching(text, pattern):
+    n = len(text)
+    m = len(pattern)
+    result = []
+    if m == 0:
+        return result
+    for i in range(n - m + 1):
+        if text[i:i + m] == pattern:
+            result.append(i)
+    return result
+
+if __name__ == "__main__":
+    text = "THIS IS A TEST TEXT"
+    pattern = "TEST"
+    matches = naive_string_matching(text, pattern)
+    if matches:
+        print(f"Pattern found at indices: {matches}")
+    else:
+        print("Pattern not found.")
