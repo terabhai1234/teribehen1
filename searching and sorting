@@ -1,0 +1,173 @@
+#include <iostream>
+#include <cstring>
+#include <cstdlib>
+using namespace std;
+
+struct Student
+{
+    int id;
+    char name[50];
+    float cgpa;
+};
+
+void addStudent(Student *&students, int &size, int &capacity)
+{
+    if (size == capacity)
+    {
+        capacity *= 2;
+        students = (Student *)realloc(students, capacity * sizeof(Student));
+        if (!students)
+        {
+            cout << "Memory allocation failed!" << endl;
+            exit(1);
+        }
+    }
+    cout << "Enter Student ID: ";
+    cin >> students[size].id;
+    cout << "Enter Student Name: ";
+    cin.ignore();
+    cin.getline(students[size].name, 50);
+    cout << "Enter Student CGPA: ";
+    cin >> students[size].cgpa;
+    size++;
+}
+
+void linearSearch(Student *students, int size, int id)
+{
+    for (int i = 0; i < size; i++)
+    {
+        if (students[i].id == id)
+        {
+            cout << "Student Found: " << students[i].name << ", CGPA: " << students[i].cgpa << endl;
+            return;
+        }
+    }
+    cout << "Student not found!" << endl;
+}
+
+void binarySearch(Student *students, int size, int id)
+{
+    int low = 0, high = size - 1;
+    while (low <= high)
+    {
+        int mid = low + (high - low) / 2;
+        if (students[mid].id == id)
+        {
+            cout << "Student Found: " << students[mid].name << ", CGPA: " << students[mid].cgpa << endl;
+            return;
+        }
+        else if (students[mid].id < id)
+            low = mid + 1;
+        else
+            high = mid - 1;
+    }
+    cout << "Student not found!" << endl;
+}
+
+void bubbleSortByName(Student *students, int size)
+{
+    for (int i = 0; i < size - 1; i++)
+    {
+        for (int j = 0; j < size - i - 1; j++)
+        {
+            if (strcmp(students[j].name, students[j + 1].name) > 0)
+            {
+                swap(students[j], students[j + 1]);
+            }
+        }
+    }
+}
+
+void selectionSortByCGPA(Student *students, int size, bool ascending = true)
+{
+    for (int i = 0; i < size - 1; i++)
+    {
+        int minIndex = i;
+        for (int j = i + 1; j < size; j++)
+        {
+            if (ascending ? (students[j].cgpa < students[minIndex].cgpa) : (students[j].cgpa > students[minIndex].cgpa))
+                minIndex = j;
+        }
+        swap(students[i], students[minIndex]);
+    }
+}
+
+void displayStudents(Student *students, int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        cout << "ID: " << students[i].id << ", Name: " << students[i].name << ", CGPA: " << students[i].cgpa << endl;
+    }
+}
+
+int main()
+{
+    int capacity = 2, size = 0;
+    Student *students = (Student *)malloc(capacity * sizeof(Student));
+    if (!students)
+    {
+        cout << "Memory allocation failed!" << endl;
+        return 1;
+    }
+
+    int choice;
+    do
+    {
+        cout << "\n1. Add Student";
+        cout << "\n2. Display Students";
+        cout << "\n3. Linear Search by ID";
+        cout << "\n4. Binary Search by ID";
+        cout << "\n5. Bubble Sort by Name";
+        cout << "\n6. Selection Sort by CGPA (Ascending)";
+        cout << "\n7. Selection Sort by CGPA (Descending)";
+        cout << "\n8. Exit";
+        cout << "\nEnter choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
+            addStudent(students, size, capacity);
+            break;
+        case 2:
+            displayStudents(students, size);
+            break;
+        case 3:
+        {
+            int id;
+            cout << "Enter ID: ";
+            cin >> id;
+            linearSearch(students, size, id);
+            break;
+        }
+        case 4:
+        {
+            int id;
+            cout << "Enter ID: ";
+            cin >> id;
+            binarySearch(students, size, id);
+            break;
+        }
+        case 5:
+            bubbleSortByName(students, size);
+            displayStudents(students, size);
+            break;
+        case 6:
+            selectionSortByCGPA(students, size, true);
+            displayStudents(students, size);
+            break;
+        case 7:
+            selectionSortByCGPA(students, size, false);
+            displayStudents(students, size);
+            break;
+        case 8:
+            cout << "Exiting...";
+            break;
+        default:
+            cout << "Invalid choice!";
+        }
+    } while (choice != 8);
+
+    free(students);
+    return 0;
+}
