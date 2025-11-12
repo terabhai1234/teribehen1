@@ -1,0 +1,156 @@
+class Node:
+    def __init__(self, key):
+        self.key = key
+        self.left = None
+        self.right = None
+
+class BinarySearchTree:
+    def __init__(self):
+        self.root = None
+
+    def insert(self, key):
+        def _insert(root, key):
+            if root is None:
+                return Node(key)
+            if key < root.key:
+                root.left = _insert(root.left, key)
+            elif key > root.key:
+                root.right = _insert(root.right, key)
+            else:
+                print(f"Duplicate entry '{key}' ignored.")
+            return root
+        self.root = _insert(self.root, key)
+
+    def delete(self, key):
+        def _delete(root, key):
+            if root is None:
+                return root
+            if key < root.key:
+                root.left = _delete(root.left, key)
+            elif key > root.key:
+                root.right = _delete(root.right, key)
+            else:
+                if root.left is None:
+                    return root.right
+                if root.right is None:
+                    return root.left
+                temp = self._min_value_node(root.right)
+                root.key = temp.key
+                root.right = _delete(root.right, temp.key)
+            return root
+        self.root = _delete(self.root, key)
+
+    def _min_value_node(self, node):
+        while node.left:
+            node = node.left
+        return node
+
+    def search(self, key):
+        def _search(root, key):
+            if root is None or root.key == key:
+                return root
+            if key < root.key:
+                return _search(root.left, key)
+            return _search(root.right, key)
+        return _search(self.root, key) is not None
+
+    def inorder(self):
+        def _inorder(root):
+            if root:
+                _inorder(root.left)
+                print(root.key, end=" ")
+                _inorder(root.right)
+        _inorder(self.root)
+        print()
+
+    def depth(self):
+        def _depth(root):
+            if root is None:
+                return 0
+            return 1 + max(_depth(root.left), _depth(root.right))
+        return _depth(self.root)
+
+    def mirror(self):
+        def _mirror(root):
+            if root:
+                root.left, root.right = root.right, root.left
+                _mirror(root.left)
+                _mirror(root.right)
+        _mirror(self.root)
+
+    def copy(self):
+        def _copy(root):
+            if root is None:
+                return None
+            n = Node(root.key)
+            n.left = _copy(root.left)
+            n.right = _copy(root.right)
+            return n
+        new = BinarySearchTree()
+        new.root = _copy(self.root)
+        return new
+
+    def display_parents(self):
+        def _disp(root):
+            if root:
+                if root.left or root.right:
+                    print(f"Parent: {root.key}, Left Child: {root.left.key if root.left else None}, Right Child: {root.right.key if root.right else None}")
+                _disp(root.left)
+                _disp(root.right)
+        _disp(self.root)
+
+    def display_leaves(self):
+        def _leaf(root):
+            if root:
+                if not root.left and not root.right:
+                    print(root.key, end=" ")
+                _leaf(root.left)
+                _leaf(root.right)
+        _leaf(self.root)
+        print()
+
+    def level_order(self):
+        if not self.root:
+            return
+        q = [self.root]
+        while q:
+            n = q.pop(0)
+            print(n.key, end=" ")
+            if n.left: q.append(n.left)
+            if n.right: q.append(n.right)
+        print()
+
+bst = BinarySearchTree()
+bst.insert(50)
+bst.insert(30)
+bst.insert(70)
+bst.insert(20)
+bst.insert(40)
+bst.insert(60)
+bst.insert(80)
+
+print("Inorder Traversal:")
+bst.inorder()
+
+print("Depth of Tree:", bst.depth())
+
+print("\nParent Nodes:")
+bst.display_parents()
+
+print("\nLeaf Nodes:")
+bst.display_leaves()
+
+print("\nLevel Order Traversal:")
+bst.level_order()
+
+print("\nMirror Image:")
+bst.mirror()
+bst.inorder()
+
+print("\nCopy of BST:")
+bst_copy = bst.copy()
+bst_copy.inorder()
+
+print("\nDeleting 70:")
+bst.delete(70)
+bst.inorder()
