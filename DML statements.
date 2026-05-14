@@ -1,0 +1,49 @@
+-- Use the database
+USE CollegeDB;
+
+-- Insert data into Student table
+INSERT INTO Student VALUES
+(1, 'Rahul Patil', 'FY BCA', 'rahul@gmail.com'),
+(2, 'Anita Sharma', 'FY BCA', 'anita@gmail.com'),
+(3, 'Aman Jadhav', 'SY BCA', 'aman@gmail.com');
+
+-- Insert data into Course table
+INSERT INTO Course VALUES
+(101, 'DBMS', 4),
+(102, 'Computer Networks', 3),
+(103, 'Operating System', 4);
+
+-- Insert data into Enrollment table
+INSERT INTO Enrollment VALUES
+(1, 1, 101, '2026-05-14'),
+(2, 1, 102, '2026-05-14'),
+(3, 2, 103, '2026-05-14'),
+(4, 3, 101, '2026-05-14');
+
+-- Display all records
+SELECT * FROM Student;
+SELECT * FROM Course;
+SELECT * FROM Enrollment;
+
+-- Update student email
+UPDATE Student
+SET email = 'rahulpatil123@gmail.com'
+WHERE student_id = 1;
+
+-- Delete one enrollment record
+DELETE FROM Enrollment
+WHERE enroll_id = 4;
+
+-- Select records after update and delete
+SELECT * FROM Student;
+SELECT * FROM Enrollment;
+
+-- Join query to show data from multiple tables
+SELECT 
+    e.enroll_id,
+    s.student_name,
+    c.course_name,
+    e.enroll_date
+FROM Enrollment e
+JOIN Student s ON e.student_id = s.student_id
+JOIN Course c ON e.course_id = c.course_id;
