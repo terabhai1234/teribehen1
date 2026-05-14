@@ -1,0 +1,43 @@
+-- Create table
+CREATE TABLE Employee (
+    emp_id NUMBER PRIMARY KEY,
+    emp_name VARCHAR2(50),
+    department VARCHAR2(30),
+    salary NUMBER(10,2)
+);
+
+-- Insert sample data
+INSERT INTO Employee VALUES (1, 'Rahul', 'IT', 50000);
+INSERT INTO Employee VALUES (2, 'Anita', 'HR', 40000);
+INSERT INTO Employee VALUES (3, 'Aman', 'Finance', 45000);
+
+COMMIT;
+
+-- Create stored procedure
+CREATE OR REPLACE PROCEDURE Increase_Salary (
+    p_emp_id IN NUMBER,
+    p_amount IN NUMBER
+) IS
+    v_name  Employee.emp_name%TYPE;
+    v_old_salary Employee.salary%TYPE;
+BEGIN
+    SELECT emp_name, salary
+    INTO v_name, v_old_salary
+    FROM Employee
+    WHERE emp_id = p_emp_id;
+
+    UPDATE Employee
+    SET salary = salary + p_amount
+    WHERE emp_id = p_emp_id;
+
+    COMMIT;
+
+    DBMS_OUTPUT.PUT_LINE('Salary increased successfully for ' || v_name);
+    DBMS_OUTPUT.PUT_LINE('Old Salary = ' || v_old_salary);
+    DBMS_OUTPUT.PUT_LINE('New Salary = ' || (v_old_salary + p_amount));
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('Employee not found');
+END;
+/
