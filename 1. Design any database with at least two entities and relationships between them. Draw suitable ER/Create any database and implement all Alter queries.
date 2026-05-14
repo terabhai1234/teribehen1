@@ -1,0 +1,45 @@
+-- Create Database
+CREATE DATABASE CollegeDB;
+
+-- Use Database
+USE CollegeDB;
+
+-- Create Student Table
+CREATE TABLE Student (
+    student_id INT PRIMARY KEY,
+    student_name VARCHAR(50),
+    age INT
+);
+
+-- Display table structure
+DESC Student;
+
+-- =====================================
+-- ALTER TABLE QUERIES
+-- =====================================
+
+-- 1. ADD a new column
+ALTER TABLE Student
+ADD email VARCHAR(50);
+
+-- 2. MODIFY existing column datatype
+ALTER TABLE Student
+MODIFY student_name VARCHAR(100);
+
+-- 3. CHANGE column name
+ALTER TABLE Student
+CHANGE age student_age INT;
+
+-- 4. RENAME table
+ALTER TABLE Student
+RENAME TO Student_Details;
+
+-- Display updated structure
+DESC Student_Details;
+
+-- 5. DROP a column
+ALTER TABLE Student_Details
+DROP COLUMN email;
+
+-- Display final structure
+DESC Student_Details;
