@@ -1,0 +1,47 @@
+-- Create Database
+CREATE DATABASE CollegeDB;
+
+-- Use Database
+USE CollegeDB;
+
+-- Create Student Table
+CREATE TABLE Student (
+    student_id INT PRIMARY KEY,
+    student_name VARCHAR(50),
+    city VARCHAR(50)
+);
+
+-- Insert Data
+INSERT INTO Student VALUES
+(1, 'Rahul', 'Pune'),
+(2, 'Anita', 'Mumbai'),
+(3, 'Aman', 'Nagpur'),
+(4, 'Priya', 'Pimpri'),
+(5, 'Rohan', 'Pune');
+
+-- Display Table
+SELECT * FROM Student;
+
+-- =====================================
+-- PATTERN MATCHING USING LIKE
+-- =====================================
+
+-- Names starting with 'R'
+SELECT * FROM Student
+WHERE student_name LIKE 'R%';
+
+-- Names ending with 'a'
+SELECT * FROM Student
+WHERE student_name LIKE '%a';
+
+-- Names containing 'm'
+SELECT * FROM Student
+WHERE student_name LIKE '%m%';
+
+-- City starting with 'P'
+SELECT * FROM Student
+WHERE city LIKE 'P%';
+
+-- Names having exactly 5 characters
+SELECT * FROM Student
+WHERE student_name LIKE '_____';
