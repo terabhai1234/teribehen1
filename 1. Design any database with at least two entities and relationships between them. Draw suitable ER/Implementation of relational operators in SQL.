@@ -1,0 +1,51 @@
+-- Create Database
+CREATE DATABASE CollegeDB;
+
+-- Use Database
+USE CollegeDB;
+
+-- Create Student Table
+CREATE TABLE Student (
+    student_id INT PRIMARY KEY,
+    student_name VARCHAR(50),
+    age INT,
+    marks INT
+);
+
+-- Insert Data
+INSERT INTO Student VALUES
+(1, 'Rahul', 19, 85),
+(2, 'Anita', 20, 92),
+(3, 'Aman', 18, 76),
+(4, 'Priya', 21, 88);
+
+-- Display Table
+SELECT * FROM Student;
+
+-- =====================================
+-- RELATIONAL OPERATORS
+-- =====================================
+
+-- Equal To (=)
+SELECT * FROM Student
+WHERE age = 20;
+
+-- Not Equal To (!=)
+SELECT * FROM Student
+WHERE age != 20;
+
+-- Greater Than (>)
+SELECT * FROM Student
+WHERE marks > 80;
+
+-- Less Than (<)
+SELECT * FROM Student
+WHERE marks < 90;
+
+-- Greater Than or Equal To (>=)
+SELECT * FROM Student
+WHERE marks >= 88;
+
+-- Less Than or Equal To (<=)
+SELECT * FROM Student
+WHERE age <= 19;
